@@ -1,7 +1,7 @@
 import { type Address, getAddress } from 'viem'
 import { publicClient, inkSepolia } from '../utils/inkRpc'
 import { type SimulationResult } from './simulator'
-import maliciousAddresses from '../data/maliciousAddresses.json'
+import maliciousAddresses from '../data/maliciousAddresses.json' with { type: 'json' }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
