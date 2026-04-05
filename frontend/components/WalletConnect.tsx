@@ -22,7 +22,8 @@ export default function WalletConnect({ onConnected }: Props) {
 
   async function connect(mode: 'register' | 'login') {
     const bundlerUrl   = process.env.NEXT_PUBLIC_BUNDLER_URL
-    const paymasterUrl = process.env.NEXT_PUBLIC_PAYMASTER_URL
+    // Paymaster disabled: ZeroDev rejects passkey validators with pm_getPaymasterStubData
+    const paymasterUrl = undefined
 
     if (!bundlerUrl) {
       setError('NEXT_PUBLIC_BUNDLER_URL must be set in .env.local')
