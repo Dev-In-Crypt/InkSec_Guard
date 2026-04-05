@@ -1,0 +1,13 @@
+{
+  "name": "@inksec/guard-sdk",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": ["inksec", "ink-chain", "erc-4337", "account-abstraction", "security"],
+  "license": "MIT"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "inksec-guard",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "sdk"
+  ],
+  "scripts": {
+    "dev:backend":    "npm run dev --workspace=backend",
+    "dev:frontend":   "npm run dev --workspace=frontend",
+    "test":           "npm run test --workspaces --if-present",
+    "test:contracts": "forge test --root contracts",
+    "test:all":       "npm run test:contracts && npm run test"
+  }
+}
