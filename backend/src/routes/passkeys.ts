@@ -1,3 +1,9 @@
+import { webcrypto } from 'node:crypto'
+// SimpleWebAuthn requires globalThis.crypto (Node 18+); polyfill for Node 16
+if (!globalThis.crypto) {
+  (globalThis as { crypto?: unknown }).crypto = webcrypto
+}
+
 import express from 'express'
 import {
   generateRegistrationOptions,

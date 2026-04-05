@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "engines": { "node": ">=18" },
   "dependencies": {
     "@simplewebauthn/server": "^13.3.0",
     "cors": "^2.8.6",
