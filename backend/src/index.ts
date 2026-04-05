@@ -9,7 +9,7 @@ import passkeysRouter  from './routes/passkeys'
 
 const app = express()
 
-app.use(cors())
+app.use(cors({ origin: true, credentials: true }))
 app.use(express.json())
 
 app.use('/api/v1/simulate', simulateRouter)
