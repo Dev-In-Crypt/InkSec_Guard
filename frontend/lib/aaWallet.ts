@@ -49,7 +49,7 @@ const ENTRY_POINT = {
 
 const PASSKEY_SERVER_URL =
   process.env.NEXT_PUBLIC_PASSKEY_SERVER_URL ??
-  'https://passkeys.zerodev.app/api/v3/6ca9c11b-8a5a-483d-bca9-d7d194662902'
+  'https://backend-production-916d.up.railway.app/api/v1/passkey'
 
 // ── Create a smart account using WebAuthn / passkey ───────────────────────────
 
