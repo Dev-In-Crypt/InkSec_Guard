@@ -65,8 +65,8 @@ function withBalanceDrain(): SimulationResult {
 
 // ── Default mock setups ────────────────────────────────────────────────────────
 
-function mockContract(overrides: { code?: string; blockNumber?: bigint } = {}) {
-  const code = overrides.code ?? '0x6080604052' // non-empty = contract
+function mockContract(overrides: { code?: `0x${string}`; blockNumber?: bigint } = {}) {
+  const code = overrides.code ?? ('0x6080604052' as `0x${string}`) // non-empty = contract
   vi.mocked(publicClient.getBytecode).mockResolvedValue(code)
   vi.mocked(publicClient.getBlock).mockResolvedValue({
     number: overrides.blockNumber ?? 1_000_000n,
@@ -79,7 +79,7 @@ function mockContract(overrides: { code?: string; blockNumber?: bigint } = {}) {
 }
 
 function mockEOA() {
-  vi.mocked(publicClient.getBytecode).mockResolvedValue('0x')
+  vi.mocked(publicClient.getBytecode).mockResolvedValue('0x' as `0x${string}`)
   vi.mocked(publicClient.getBlock).mockResolvedValue({ number: 1_000_000n } as never)
   mockFetch.mockResolvedValue({
     ok:   true,
