@@ -78,6 +78,8 @@ ZeroDev AA Wallet ──UserOp──► EntryPoint ──► InkSecPaymaster
 
 **Summary:** 16 txs · 10 unique smart accounts · 12 safe · 4 critical (intercepted by InkSec Guard) · all gas sponsored by ZeroDev paymaster
 
+Full transaction list with descriptions: [`docs/transactions.md`](docs/transactions.md)
+
 ---
 
 ## Quick Start
@@ -163,18 +165,35 @@ Simulate a transaction and receive a risk assessment.
 
 ```bash
 # Solidity contracts (Foundry)
-npm run test:contracts    # 28 tests
+npm run test:contracts
 
 # Backend (Vitest)
-cd backend && npx vitest run   # 37 tests
+cd backend && npx vitest run
 
 # All tests
 npm run test:all
 ```
 
-**Current coverage:**
-- 28 Solidity tests (MockERC20, DrainerMock, InkSecPaymaster)
-- 37 TypeScript tests (decoder, simulator, riskScorer, REST API)
+### Solidity — 28 tests passed, 0 failed
+
+```
+test/MockERC20.t.sol        11 tests  ✓  transfer, transferFrom, mint, drain, reentrancy
+test/DrainerMock.t.sol       4 tests  ✓  drain, reentrancy, revert on 0 balance, revert no approval
+test/InkSecPaymaster.t.sol  13 tests  ✓  blacklist add/remove, validate, events, access control
+
+Ran 3 test suites: 28 tests passed, 0 failed (13.53ms)
+```
+
+### TypeScript — 37 tests passed, 0 failed
+
+```
+src/__tests__/decoder.test.ts     11 tests  ✓  approve, transfer, transferFrom, drain, drainFrom, unknown
+src/__tests__/riskScorer.test.ts  10 tests  ✓  levels, rules (blacklist/unlimited/drain/EOA/unverified/revert), cap
+src/__tests__/simulator.test.ts    8 tests  ✓  approve, transfer, drain, drainFrom, revert, unknown calldata
+src/__tests__/api.test.ts          8 tests  ✓  health, 400 validation, 200 simulate, shape, critical scoring
+
+Test Files  4 passed (4) · Tests 37 passed (37) · Duration 1.29s
+```
 
 ---
 
@@ -210,15 +229,38 @@ After deploy, update `contracts/deployments/ink-sepolia.json` and
 
 ---
 
-## Roadmap (Spark → Forge)
+## Roadmap
 
-| Milestone | Description |
-|-----------|-------------|
-| Mainnet | Deploy all contracts to Ink Mainnet (chain ID 57073) |
-| SDK | `@inksec/guard-sdk` npm package with `simulateAndWarn(userOp)` one-liner |
-| Registry | On-chain community-curated malicious address registry with staking |
-| Integrations | Partner with 1–2 Ink ecosystem wallets |
-| Superchain | Extend to Base, Optimism, Zora |
+### Phase 1 — Spark (current)
+> Goal: working proof-of-concept on Ink Sepolia, grant submission
+
+- [x] ERC-4337 smart account via ZeroDev Kernel v3.1
+- [x] WebAuthn / passkey authentication (no private key in browser)
+- [x] Transaction simulator (`eth_call` + balance/allowance reads)
+- [x] 7-rule risk scoring engine (blacklist, unlimited approval, drain, EOA, unverified, revert, value)
+- [x] Human-readable warnings before signing
+- [x] InkSecPaymaster — on-chain second layer (gas refused for blacklisted contracts)
+- [x] 65 automated tests (28 Solidity + 37 TypeScript), 0 failures
+- [x] 16 real on-chain transactions from 10 unique smart accounts
+- [x] Deployed: Railway (backend) + Railway (frontend)
+
+### Phase 2 — Forge (next 3 months)
+> Goal: production-ready tool used by real Ink wallets
+
+- [ ] Deploy all contracts to **Ink Mainnet** (chain ID 57073)
+- [ ] Publish `@inksec/guard-sdk` npm package — `simulateAndWarn(userOp)` one-liner for any wallet
+- [ ] **Browser extension** — intercepts `eth_sendTransaction` / `eth_signTypedData` in any dApp
+- [ ] Expand risk rules: NFT batch transfers, permit2 signatures, proxy upgrades, flash loan callbacks
+- [ ] Blockscout integration for real-time contract verification status
+
+### Phase 3 — Scale (6–12 months)
+> Goal: ecosystem infrastructure
+
+- [ ] **On-chain malicious address registry** — community-curated, staking-backed, governance-controlled
+- [ ] Partner integrations with 2–3 Ink-native wallets
+- [ ] Extend to full **Superchain** (Base, Optimism, Zora, Mode) via shared registry
+- [ ] Threat intelligence feed — automated ingestion from Forta, MistTrack, Etherscan labels
+- [ ] Analytics dashboard — blocked txs, risk distribution, trending threats per chain
 
 ---
 
