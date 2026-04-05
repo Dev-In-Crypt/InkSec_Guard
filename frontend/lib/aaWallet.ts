@@ -76,7 +76,7 @@ export async function createPasskeyAccount(
     webAuthnKey,
     entryPoint:               ENTRY_POINT,
     kernelVersion:            KERNEL_V3_1,
-    validatorContractVersion: PasskeyValidatorContractVersion.V0_0_2_UNPATCHED,
+    validatorContractVersion: PasskeyValidatorContractVersion.V0_0_3_PATCHED,
   })
 
   const account = await createKernelAccount(publicClient, {
