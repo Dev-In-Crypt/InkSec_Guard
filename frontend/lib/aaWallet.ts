@@ -63,9 +63,12 @@ export async function createPasskeyAccount(
     transport: http(),
   })
 
+  const rpID = typeof window !== 'undefined' ? window.location.hostname : 'localhost'
+
   const webAuthnKey = await toWebAuthnKey({
     passkeyName:      'InkSec Guard',
     passkeyServerUrl: PASSKEY_SERVER_URL,
+    rpID,
     mode:             mode === 'register' ? WebAuthnMode.Register : WebAuthnMode.Login,
   })
 
