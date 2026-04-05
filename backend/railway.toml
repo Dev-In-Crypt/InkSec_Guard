@@ -4,5 +4,5 @@ builder = "nixpacks"
 [deploy]
 startCommand = "node dist/index.cjs"
 healthcheckPath = "/api/v1/health"
-healthcheckTimeout = 15
+healthcheckTimeout = 300
 restartPolicyType = "on_failure"
