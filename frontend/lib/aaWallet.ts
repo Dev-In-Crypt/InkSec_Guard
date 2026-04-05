@@ -1,11 +1,19 @@
 'use client'
 
-import { defineChain } from 'viem'
-import { createKernelAccount, createKernelAccountClient, createZeroDevPaymasterClient } from '@zerodev/sdk'
-import { signerToEcdsaValidator } from '@zerodev/ecdsa-validator'
-import { KERNEL_V3_1 } from '@zerodev/sdk/constants'
+import { defineChain, type Address } from 'viem'
 import { createPublicClient, http } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
+import {
+  createKernelAccount,
+  createKernelAccountClient,
+  createZeroDevPaymasterClient,
+} from '@zerodev/sdk'
+import { KERNEL_V3_1 } from '@zerodev/sdk/constants'
+import {
+  toPasskeyValidator,
+  toWebAuthnKey,
+  WebAuthnMode,
+  PasskeyValidatorContractVersion,
+} from '@zerodev/passkey-validator'
 
 // ── Ink Sepolia chain definition ──────────────────────────────────────────────
 
@@ -28,40 +36,54 @@ export const inkSepolia = defineChain({
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export interface SmartAccountInfo {
-  address:   `0x${string}`
-  client:    ReturnType<typeof createKernelAccountClient>
+  address: `0x${string}`
+  client:  ReturnType<typeof createKernelAccountClient>
 }
 
-// ── Create a smart account from a private key (demo only) ────────────────────
-// In production this would use a social login signer (passkey, Google, etc.)
+// ── Constants ─────────────────────────────────────────────────────────────────
 
-export async function createSmartAccount(
-  privateKey: `0x${string}`,
+const ENTRY_POINT = {
+  address: '0x0000000071727De22E5E9d8BAf0edAc6f37da032' as Address,
+  version: '0.7' as const,
+}
+
+const PASSKEY_SERVER_URL =
+  process.env.NEXT_PUBLIC_PASSKEY_SERVER_URL ?? ''
+
+// ── Create a smart account using WebAuthn / passkey ───────────────────────────
+
+export async function createPasskeyAccount(
+  mode: 'register' | 'login',
   bundlerUrl: string,
   paymasterUrl?: string,
 ): Promise<SmartAccountInfo> {
-  const signer = privateKeyToAccount(privateKey)
-
   const publicClient = createPublicClient({
     chain:     inkSepolia,
     transport: http(),
   })
 
-  const ecdsaValidator = await signerToEcdsaValidator(publicClient, {
-    signer,
-    kernelVersion: KERNEL_V3_1,
-    entryPoint:    { address: '0x0000000071727De22E5E9d8BAf0edAc6f37da032', version: '0.7' },
+  const webAuthnKey = await toWebAuthnKey({
+    passkeyName:      'InkSec Guard',
+    passkeyServerUrl: PASSKEY_SERVER_URL,
+    mode:             mode === 'register' ? WebAuthnMode.Register : WebAuthnMode.Login,
+  })
+
+  const passkeyValidator = await toPasskeyValidator(publicClient, {
+    webAuthnKey,
+    entryPoint:               ENTRY_POINT,
+    kernelVersion:            KERNEL_V3_1,
+    validatorContractVersion: PasskeyValidatorContractVersion.V0_0_2_UNPATCHED,
   })
 
   const account = await createKernelAccount(publicClient, {
-    plugins:       { sudo: ecdsaValidator },
+    plugins:       { sudo: passkeyValidator },
+    entryPoint:    ENTRY_POINT,
     kernelVersion: KERNEL_V3_1,
-    entryPoint:    { address: '0x0000000071727De22E5E9d8BAf0edAc6f37da032', version: '0.7' },
   })
 
   const kernelClient = createKernelAccountClient({
     account,
-    chain:     inkSepolia,
+    chain:            inkSepolia,
     bundlerTransport: http(bundlerUrl),
     ...(paymasterUrl
       ? {
