@@ -188,7 +188,7 @@ describe('scoreRisk — combined scenarios', () => {
   it('score is capped at 100', async () => {
     mockContract()
     // EOA mock for approval-to-EOA rule
-    vi.mocked(publicClient.getBytecode).mockResolvedValue('0x')
+    vi.mocked(publicClient.getBytecode).mockResolvedValue('0x' as `0x${string}`)
     vi.mocked(publicClient.getBlock).mockResolvedValue({ number: 1_000_000n } as never)
     // All rules fire: blacklist + unlimited + balance drain + EOA + revert
     const sim: SimulationResult = {
