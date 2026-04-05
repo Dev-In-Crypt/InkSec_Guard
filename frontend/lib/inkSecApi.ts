@@ -1,4 +1,4 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? 'https://backend-production-916d.up.railway.app'
+const BACKEND_URL = (process.env.NEXT_PUBLIC_BACKEND_URL ?? 'https://backend-production-916d.up.railway.app').replace(/\/$/, '')
 
 // ── Types mirroring backend SimulationResult / RiskScore ─────────────────────
 
