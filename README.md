@@ -51,6 +51,12 @@ ZeroDev AA Wallet ──UserOp──► EntryPoint ──► InkSecPaymaster
 - **Frontend:** https://frontend-production-ec44.up.railway.app
 - **Backend API:** https://backend-production-916d.up.railway.app/api/v1/health
 
+### Safe transaction — approve(1000 tUSDC)
+![Safe result](docs/screenshots/safe-result.png)
+
+### Critical warning — drain() on blacklisted contract
+![Critical warning](docs/screenshots/critical-warning.png)
+
 ---
 
 ## On-Chain Activity (Ink Sepolia)
