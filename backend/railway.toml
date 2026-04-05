@@ -2,7 +2,7 @@
 builder = "nixpacks"
 
 [deploy]
-startCommand = "cd backend && node --experimental-global-webcrypto --import tsx/esm src/index.ts"
+startCommand = "cd backend && node --import tsx/esm server.mjs"
 healthcheckPath = "/api/v1/health"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
