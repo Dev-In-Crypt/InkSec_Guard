@@ -13,14 +13,14 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-gray-800 px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <div>
+          <a href="/" className="block hover:opacity-80 transition-opacity">
             <h1 className="text-xl font-bold tracking-tight">
               <span className="text-indigo-400">InkSec</span> Guard
             </h1>
             <p className="text-gray-500 text-xs">
               Real-time transaction security for Ink Chain
             </p>
-          </div>
+          </a>
           <span className="text-xs bg-gray-800 text-gray-400 px-3 py-1 rounded-full">
             Ink Sepolia
           </span>
